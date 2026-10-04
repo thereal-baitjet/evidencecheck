@@ -8,7 +8,7 @@ Missing and ambiguous cases remain explicit.
 
 from enum import Enum
 from typing import Optional, Literal
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class StudyDesignEnum(str, Enum):
@@ -37,9 +37,10 @@ class EvidenceSpan(BaseModel):
     start_char: int = Field(..., description="Starting character position in abstract")
     end_char: int = Field(..., description="Ending character position (exclusive)")
 
-    @validator("end_char")
-    def end_after_start(cls, v, values):
-        if "start_char" in values and v <= values["start_char"]:
+    @field_validator("end_char")
+    @classmethod
+    def end_after_start(cls, v, info):
+        if "start_char" in info.data and v <= info.data["start_char"]:
             raise ValueError("end_char must be greater than start_char")
         return v
 
@@ -108,16 +109,18 @@ class ParticipantCountExtraction(BaseModel):
         description="Model confidence (0.0-1.0)"
     )
 
-    @validator("evidence_span")
-    def evidence_required_if_reported(cls, v, values):
-        if "status" in values and values["status"] == ParticipantCountStatus.REPORTED:
+    @field_validator("evidence_span")
+    @classmethod
+    def evidence_required_if_reported(cls, v, info):
+        if "status" in info.data and info.data["status"] == ParticipantCountStatus.REPORTED:
             if v is None:
                 raise ValueError("evidence_span required when status is 'reported'")
         return v
 
-    @validator("count")
-    def count_required_if_reported(cls, v, values):
-        if "status" in values and values["status"] == ParticipantCountStatus.REPORTED:
+    @field_validator("count")
+    @classmethod
+    def count_required_if_reported(cls, v, info):
+        if "status" in info.data and info.data["status"] == ParticipantCountStatus.REPORTED:
             if v is None:
                 raise ValueError("count must be set when status is 'reported'")
         return v
