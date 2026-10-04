@@ -1,0 +1,24 @@
+# EvidenceCheck: Offline-first research portfolio project
+# For live TypeSafe Jev integration, see requirements-live.txt
+
+# Web framework
+streamlit==1.40.1
+streamlit-select==0.7
+
+# Data and validation
+pydantic==2.6.4
+pandas==2.2.0
+python-dateutil==2.8.2
+
+# Testing
+pytest==7.4.4
+pytest-cov==4.1.0
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Development
+black==24.1.1
+flake8==7.0.0
+mypy==1.8.0

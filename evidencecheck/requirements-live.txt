@@ -1,0 +1,8 @@
+# Additional dependencies for live TypeSafe Jev integration
+# Install after base requirements.txt
+
+# TypeSafe SDK for live Jev review
+typesafe-sdk==1.0.0
+
+# Optional: For enhanced logging and monitoring
+python-json-logger==2.0.7
