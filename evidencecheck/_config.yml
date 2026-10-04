@@ -1,0 +1,8 @@
+title: EvidenceCheck
+description: Research portfolio for evaluating AI extraction accuracy on medical abstracts
+author: Juan Santos
+theme: jekyll-theme-minimal
+show_downloads: false
+github:
+  is_project_page: true
+  repository_url: https://github.com/thereal-baitjet/evidencecheck
