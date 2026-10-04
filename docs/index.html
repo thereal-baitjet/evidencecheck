@@ -2,10 +2,551 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=./evidencecheck/">
-    <title>Redirecting to EvidenceCheck...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EvidenceCheck - AI Extraction Evaluation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0d47a1;
+            --secondary: #1565c0;
+            --accent: #1976d2;
+            --success: #2e7d32;
+            --warning: #f57c00;
+            --dark: #212121;
+            --light: #f5f5f5;
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: #fafafa;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        nav {
+            background: var(--dark);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 10px;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 60px 20px;
+            margin: 0;
+        }
+
+        section:nth-child(even) {
+            background: white;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .card h3 {
+            color: var(--accent);
+            margin-top: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin-top: 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .status-complete {
+            background: #c8e6c9;
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: #ffe0b2;
+            color: var(--warning);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .doc-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s;
+        }
+
+        .doc-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .doc-card h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.6em;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <p>Redirecting to <a href="./evidencecheck/">EvidenceCheck</a>...</p>
+    <!-- Header -->
+    <header>
+        <h1>📋 EvidenceCheck</h1>
+        <p>A research portfolio for evaluating AI extraction accuracy on medical abstracts</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#quickstart">Quick Start</a></li>
+            <li><a href="#documentation">Docs</a></li>
+            <li><a href="#status">Status</a></li>
+            <li><a href="https://github.com/thereal-baitjet/evidencecheck" target="_blank">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <!-- Overview Section -->
+    <section id="overview">
+        <div class="container">
+            <h2>What is EvidenceCheck?</h2>
+            <p>EvidenceCheck is a research portfolio project that evaluates whether AI can accurately extract facts from medical study abstracts. It uses <strong>TypeSafe Jev</strong> (a System One AI model for structured judgments) to verify extractions and compares three review gates:</p>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>🚫 No Review</h3>
+                    <p>Baseline: extract without any verification</p>
+                </div>
+                <div class="card">
+                    <h3>🔍 Deterministic Checks</h3>
+                    <p>Schema validation and evidence span verification</p>
+                </div>
+                <div class="card">
+                    <h3>🤖 Jev Review Gate</h3>
+                    <p>Deterministic checks + Jev confidence thresholding</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 30px; font-size: 1.1em;">
+                <strong>Research Question</strong>: Can Jev identify unsupported extractions, and what fraction of papers need human review?
+            </p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+            <h2>Key Features</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>✓ Extract-and-Verify</h3>
+                    <p>Deterministic extraction with evidence spans. Jev verifies, doesn't generate.</p>
+                </div>
+                <div class="card">
+                    <h3>✓ Offline-First</h3>
+                    <p>Works without API keys. Optional live TypeSafe Jev integration.</p>
+                </div>
+                <div class="card">
+                    <h3>✓ Transparent</h3>
+                    <p>Every extraction cites exact text. No silent substitutions.</p>
+                </div>
+                <div class="card">
+                    <h3>✓ Strict Rules</h3>
+                    <p>Participant count extraction enforces primary study totals only.</p>
+                </div>
+                <div class="card">
+                    <h3>✓ Research Integrity</h3>
+                    <p>Locked dev/held-out splits. Frozen prompts. Honest limitations.</p>
+                </div>
+                <div class="card">
+                    <h3>✓ Full Documentation</h3>
+                    <p>Protocol, annotation guide, test plan, and evaluation template.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quickstart">
+        <div class="container">
+            <h2>Quick Start</h2>
+
+            <h3>1. Clone and Setup</h3>
+            <div class="code-block">
+git clone https://github.com/thereal-baitjet/evidencecheck.git
+cd evidencecheck
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+            </div>
+
+            <h3>2. Run Offline Demo (No API Key Needed)</h3>
+            <div class="code-block">
+streamlit run src/app.py
+            </div>
+            <p>Then open <code>http://localhost:8501</code> in your browser.</p>
+
+            <h3>3. Run Tests</h3>
+            <div class="code-block">
+pytest tests/test_extraction.py -v
+            </div>
+
+            <h3>4. (Optional) Enable Live Jev</h3>
+            <p>Get an API key from <a href="https://console.typesafe.ai/" target="_blank">console.typesafe.ai</a>, then:</p>
+            <div class="code-block">
+export TYPESAFE_API_KEY="your-key-here"
+pip install -r requirements-live.txt
+# Enable "Live Jev Review" in app settings
+            </div>
+
+            <div class="hero-buttons">
+                <a href="https://github.com/thereal-baitjet/evidencecheck" class="btn btn-primary">View on GitHub</a>
+                <a href="https://docs.typesafe.ai/" class="btn btn-secondary">TypeSafe Docs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="documentation">
+        <div class="container">
+            <h2>Documentation</h2>
+
+            <div class="docs-grid">
+                <a href="https://github.com/thereal-baitjet/evidencecheck/blob/main/README.md" class="doc-card" target="_blank">
+                    <h4>📖 Getting Started</h4>
+                    <p>Setup instructions, features, and project overview</p>
+                </a>
+
+                <a href="https://github.com/thereal-baitjet/evidencecheck/blob/main/docs/PROTOCOL.md" class="doc-card" target="_blank">
+                    <h4>📋 Research Protocol</h4>
+                    <p>Full study design, extraction rules, evaluation metrics</p>
+                </a>
+
+                <a href="https://github.com/thereal-baitjet/evidencecheck/blob/main/docs/ANNOTATION_GUIDE.md" class="doc-card" target="_blank">
+                    <h4>✏️ Annotation Guide</h4>
+                    <p>How to label abstracts with participant count rules</p>
+                </a>
+
+                <a href="https://github.com/thereal-baitjet/evidencecheck/blob/main/docs/DECISIONS.md" class="doc-card" target="_blank">
+                    <h4>🏗️ Architecture Decisions</h4>
+                    <p>Design choices and TypeSafe integration patterns</p>
+                </a>
+
+                <a href="https://github.com/thereal-baitjet/evidencecheck/blob/main/docs/GAUNTLET.md" class="doc-card" target="_blank">
+                    <h4>🧪 Test Plan</h4>
+                    <p>Test cases, failure scenarios, and success criteria</p>
+                </a>
+
+                <a href="https://github.com/thereal-baitjet/evidencecheck/blob/main/CLAUDE.md" class="doc-card" target="_blank">
+                    <h4>👨‍💻 Development Guide</h4>
+                    <p>Setup, testing, and implementation notes</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Section -->
+    <section id="status">
+        <div class="container">
+            <h2>Project Status</h2>
+
+            <h3>Completed Phases</h3>
+            <ul class="feature-list">
+                <li><span class="status-badge status-complete">Phase 0</span> Environment verification & TypeSafe integration</li>
+                <li><span class="status-badge status-complete">Phase 1</span> Schema design & annotation guide</li>
+                <li><span class="status-badge status-complete">Phase 2</span> Extraction logic, gates, & Streamlit UI</li>
+                <li><span class="status-badge status-complete">Phase 3</span> Documentation, tests, & templates</li>
+            </ul>
+
+            <h3>Upcoming Phases</h3>
+            <ul class="feature-list">
+                <li><span class="status-badge status-pending">Phase 4</span> Data collection (PubMed abstracts)</li>
+                <li><span class="status-badge status-pending">Phase 5</span> Evaluation (run gates, calculate metrics)</li>
+                <li><span class="status-badge status-pending">Phase 6</span> Reporting (fill pilot report with results)</li>
+            </ul>
+
+            <h3>Key Statistics</h3>
+            <div class="grid">
+                <div class="card">
+                    <h3>5</h3>
+                    <p>Python modules (schema, extraction, gates, adapter, app)</p>
+                </div>
+                <div class="card">
+                    <h3>20</h3>
+                    <p>Unit tests (17/20 passing, patterns in progress)</p>
+                </div>
+                <div class="card">
+                    <h3>4</h3>
+                    <p>Key documentation files + inline code docs</p>
+                </div>
+                <div class="card">
+                    <h3>10</h3>
+                    <p>Synthetic abstracts for offline demo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stack Section -->
+    <section>
+        <div class="container">
+            <h2>Technology Stack</h2>
+
+            <h3>Frontend</h3>
+            <p>Streamlit — Interactive web app for corpus browsing, annotation, and visualization</p>
+
+            <h3>Backend</h3>
+            <ul class="feature-list">
+                <li>Pydantic — Schema validation and data models</li>
+                <li>Pandas — Data analysis and metrics</li>
+                <li>Python regex — Deterministic extraction patterns</li>
+                <li>Pytest — Automated testing</li>
+            </ul>
+
+            <h3>AI Integration</h3>
+            <ul class="feature-list">
+                <li>TypeSafe Jev — System One model for verification (optional)</li>
+                <li>Mock adapter — Offline demo with synthetic confidence</li>
+            </ul>
+
+            <h3>Data</h3>
+            <ul class="feature-list">
+                <li>JSONL storage — Abstracts and annotations</li>
+                <li>SHA256 hashing — Deduplication</li>
+                <li>Evidence spans — Exact text citations</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; text-align: center;">
+        <div class="container">
+            <h2 style="color: white;">Ready to Explore?</h2>
+            <p style="font-size: 1.1em; margin-bottom: 30px;">
+                This is a research portfolio project designed for learning and evaluation.
+                It's fully offline, open source, and ready for pilot data collection.
+            </p>
+            <div class="hero-buttons">
+                <a href="https://github.com/thereal-baitjet/evidencecheck" class="btn btn-primary" target="_blank">
+                    View on GitHub
+                </a>
+                <a href="https://github.com/thereal-baitjet/evidencecheck/blob/main/docs/PROTOCOL.md" class="btn btn-secondary" target="_blank">
+                    Read the Protocol
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>EvidenceCheck</strong> — Research portfolio for evaluating AI extraction accuracy</p>
+        <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">
+            Built with Streamlit, Pydantic, and TypeSafe Jev
+        </p>
+        <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.7;">
+            © 2026 | <a href="https://github.com/thereal-baitjet/evidencecheck" style="color: white;">GitHub Repository</a>
+        </p>
+    </footer>
 </body>
 </html>
