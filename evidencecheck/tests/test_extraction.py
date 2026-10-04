@@ -175,9 +175,10 @@ class TestDeterministicExtraction:
         abstract = "150 adults were enrolled. 120 completed the study. 110 had complete data for analysis."
         extraction = find_participant_count(abstract)
         # Should detect multiple counts and mark ambiguous
+        # (The function picks the last one, or marks ambiguous if > 3)
         assert extraction.status in (
             ParticipantCountStatus.AMBIGUOUS,
-            ParticipantCountStatus.REPORTED,  # May pick last one
+            ParticipantCountStatus.REPORTED,
         )
 
     def test_extract_abstract_full(self):

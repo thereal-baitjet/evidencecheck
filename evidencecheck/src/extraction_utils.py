@@ -116,9 +116,10 @@ def find_participant_count(abstract_text: str) -> ParticipantCountExtraction:
     # Pattern: explicit total numbers with participant indicators
     # Examples: "n=150", "120 adults", "240 participants"
     participant_patterns = [
-        r"\bn\s*=\s*(\d+)\s*(?:adult|participant|subject|patient|person)",
-        r"\bN\s*=\s*(\d+)\s*(?:adult|participant|subject|patient|person)",
-        r"(\d+)\s+(?:adult|participant|subject|patient|person|individual)s?\s+(?:completed|included|enrolled)",
+        r"\bn\s*=\s*(\d+)",  # n=150 (any context)
+        r"\bN\s*=\s*(\d+)",  # N=150 (any context)
+        r"(\d+)\s+(?:sedentary|healthy|older|younger|obese|overweight)?\s*(?:adult|participant|subject|patient|individual)s?\b",  # 150 [sedentary] adults
+        r"(?:with|included|comprised)\s+(\d+)\s+(?:adult|participant|subject|patient)s?",  # with 150 adults
         r"(?:completed|included|enrolled|studied)\s+(\d+)\s+(?:adult|participant|subject|patient)s?",
     ]
 
