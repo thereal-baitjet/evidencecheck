@@ -194,6 +194,66 @@ An integer or null, with status: `reported`, `not_reported`, `ambiguous`, `not_a
 
 ---
 
+## Getting Started
+
+### 1. One-Time Setup
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2. Run Offline Demo (No API Key Needed)
+```bash
+export DEMO_MODE=true
+streamlit run src/app.py
+```
+Then navigate to `http://localhost:8501` and explore the tabs.
+
+### 3. Run Tests
+```bash
+pytest tests/test_extraction.py -v
+```
+
+### 4. Review the Protocol
+See [docs/PROTOCOL.md](docs/PROTOCOL.md) for the research design and evaluation plan.
+
+### 5. Check the Test Plan
+See [docs/GAUNTLET.md](docs/GAUNTLET.md) for failure case testing and success criteria.
+
+### 6. (Optional) Enable Live Jev
+Requires TypeSafe API key from https://console.typesafe.ai/:
+```bash
+export TYPESAFE_API_KEY="your-key-here"
+pip install -r requirements-live.txt
+# Then in app settings, enable "Live Jev Review"
+```
+
+---
+
+## Project Status
+
+✅ **Phase 1**: Environment verification, schema design  
+✅ **Phase 2**: Extraction logic, evaluation gates, Streamlit UI  
+✅ **Phase 3**: Documentation, test plan, pilot report template  
+⏳ **Phase 4**: Data collection (PubMed retrieval, annotation)  
+⏳ **Phase 5**: Evaluation (run gates, calculate metrics)  
+⏳ **Phase 6**: Reporting (fill PILOT_REPORT.md with actual results)  
+
+---
+
+## Documentation
+
+- **[CLAUDE.md](CLAUDE.md)** — Project setup, testing, architecture
+- **[PHASE_0_REPORT.md](PHASE_0_REPORT.md)** — TypeSafe integration verification
+- **[docs/PROTOCOL.md](docs/PROTOCOL.md)** — Research protocol and evaluation design
+- **[docs/ANNOTATION_GUIDE.md](docs/ANNOTATION_GUIDE.md)** — How to annotate abstracts
+- **[docs/DECISIONS.md](docs/DECISIONS.md)** — Architecture decisions and TypeSafe patterns
+- **[docs/GAUNTLET.md](docs/GAUNTLET.md)** — Test plan and failure case scenarios
+- **[reports/PILOT_REPORT.md](reports/PILOT_REPORT.md)** — Evaluation results template (pending)
+
+---
+
 ## Questions?
 
 See [CLAUDE.md](CLAUDE.md) for implementation notes, or [docs/DECISIONS.md](docs/DECISIONS.md) for architecture rationale.
